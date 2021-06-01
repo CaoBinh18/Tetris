@@ -120,9 +120,19 @@ class Brick {
             }
             newData.push(newRow);
         }
-        this.data = newData;
-        this.createDots();
-        console.table(newData);
+        let isNewDataValid = true;
+        for (let newRow = 0; newRow < newData.length; newRow++) {
+            for (let newCol = 0; newCol < newData[0].length; newCol++) {
+                if (newData[newRow][newCol] == x &&
+                   ! this.game.board.isEmptyCell(newRow, newCol)) {
+                    isNewDataValid = false;
+                }
+            }
+        }
+        if (isNewDataValid) {
+            this.data = newData;
+            this.createDots();
+        }
     }
 
     appendToBoard() {
@@ -182,7 +192,7 @@ class Board {
 
     isRowFull(row) {
         let full = true;
-        for (let col = 0; col < NUM_ROWS; col++) {
+        for (let col = 0; col < NUM_COLS; col++) {
             if (this.isEmptyCell(row, col)) {
                 full = false;
             }
@@ -190,15 +200,16 @@ class Board {
         return full;
     }
     fullRow() {
-        for (let row = NUM_ROWS; row >= 0; row--) {
-          if (this.isRowFull(row)) {
-              this.removeRow(row);
-          }
+        for (let row = NUM_ROWS - 1; row >= 0; row--) {
+            if (this.isRowFull(row)) {
+                this.removeRow(row);
+            }
         }
     }
-    removeRow() {
-         this.data.splice(row, 1);
-         this.data.unshift([_, _, _, _, _, _, _, _, _, _]);
+    removeRow(row) {
+        this.data.splice(row, 1);
+        this.data.unshift([_, _, _, _, _, _, _, _, _, _]);
+        this.createDots();
     }
     createDots() {
         let dots = [];
