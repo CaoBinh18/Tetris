@@ -16,6 +16,7 @@ class Brick {
         this.createData();
         this.createDots();
     }
+
     createData() {
         let baseData = [
             [
@@ -46,12 +47,15 @@ class Brick {
                 [x, x, _]
             ]
         ];
+
         let r = Math.floor(Math.random() * 6);
+
         this.data = baseData[r];
     }
 
     canMoveRight() {
         let thisBrickCanMoveRight = true;
+
         this.dots.forEach(dot => {
             if (!dot.canMoveRight()) {
                 thisBrickCanMoveRight = false;
@@ -59,6 +63,7 @@ class Brick {
         });
         return thisBrickCanMoveRight;
     }
+
     moveRight() {
         if (this.canMoveRight()) {
             this.row++;
@@ -70,6 +75,7 @@ class Brick {
 
     canMoveLeft() {
         let thisBrickCanMoveLeft = true;
+
         this.dots.forEach(dot => {
             if (!dot.canMoveLeft()) {
                 thisBrickCanMoveLeft = false;
@@ -77,6 +83,7 @@ class Brick {
         });
         return thisBrickCanMoveLeft;
     }
+
     moveLeft() {
         if (this.canMoveLeft()) {
             this.row--;
@@ -85,8 +92,10 @@ class Brick {
             });
         }
     }
+
     canFall() {
         let thisBrickCanFall = true;
+
         this.dots.forEach(dot => {
             if (!dot.canFall()) {
                 thisBrickCanFall = false;
@@ -94,6 +103,7 @@ class Brick {
         });
         return thisBrickCanFall;
     }
+
     fall() {
         if (this.canFall()) {
             this.row++;
@@ -106,13 +116,17 @@ class Brick {
             this.game.board.fullRow();
         }
     }
+
     moveDown() {
         while (this.canFall()) {
             this.fall();
         }
     }
+
     rotate() {
         let newData = [];
+        let isNewDataValid = true; let isNewDataValid = true;
+
         for (let col = 0; col < this.data[0].length; col++) {
             let newRow = []
             for (let row = this.data.length - 1; row >= 0; row--) {
@@ -120,15 +134,17 @@ class Brick {
             }
             newData.push(newRow);
         }
-        let isNewDataValid = true;
+
+
         for (let newRow = 0; newRow < newData.length; newRow++) {
             for (let newCol = 0; newCol < newData[0].length; newCol++) {
                 if (newData[newRow][newCol] == x &&
-                   ! this.game.board.isEmptyCell(newRow, newCol)) {
+                    !this.game.board.isEmptyCell(newRow, newCol)) {
                     isNewDataValid = false;
                 }
             }
         }
+
         if (isNewDataValid) {
             this.data = newData;
             this.createDots();
@@ -140,8 +156,10 @@ class Brick {
             this.game.board.data[dot.row][dot.col] = x;
         });
     }
+
     createDots() {
         this.dots = [];
+
         for (let row = 0; row < this.data.length; row++) {
             for (let col = 0; col < this.data[0].length; col++) {
                 if (this.data[row][col] == x) {
@@ -151,6 +169,7 @@ class Brick {
             }
         }
     }
+
     draw() {
         this.dots.forEach(dot => dot.draw());
     }
@@ -192,6 +211,7 @@ class Board {
 
     isRowFull(row) {
         let full = true;
+
         for (let col = 0; col < NUM_COLS; col++) {
             if (this.isEmptyCell(row, col)) {
                 full = false;
@@ -211,8 +231,10 @@ class Board {
         this.data.unshift([_, _, _, _, _, _, _, _, _, _]);
         this.createDots();
     }
+
     createDots() {
         let dots = [];
+
         for (let row = 0; row < NUM_ROWS; row++) {
             for (let col = 0; col < NUM_COLS; col++) {
                 if (this.data[row][col] == x) {
@@ -222,8 +244,10 @@ class Board {
             }
         }
     }
+
     draw() {
         let dots = [];
+
         for (let row = 0; row < NUM_ROWS; row++) {
             for (let col = 0; col < NUM_COLS; col++) {
                 if (this.data[row][col] == x) {
@@ -243,6 +267,7 @@ class Dot {
         this.row = row;
         this.col = col;
     }
+
     hitLeft() {
         return this.col == 0;
     }
@@ -306,6 +331,7 @@ class Dot {
     draw() {
         let x = this.col * this.size;
         let y = this.row * this.size;
+
         this.game.ctx.fillStyle = 'black';
         this.game.ctx.fillRect(x + 1, y + 1, this.size - 2, this.size - 2);
     }
@@ -330,14 +356,17 @@ class Game {
         this.startGame();
         this.loop();
     }
+
     startGame() {
         setInterval(() => {
             this.brick.fall();
         }, 1000);
     }
+
     createNewBrick() {
         this.brick = new Brick(this);
     }
+
     keyBoard() {
         document.addEventListener('keydown', (event) => {
             console.log(event.code);
@@ -357,13 +386,11 @@ class Game {
 
     }
 
-    update() {
-
-    }
     clearScreen() {
         this.ctx.fillStyle = 'white';
         this.ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
     }
+
     draw() {
         this.clearScreen();
         this.board.draw();
