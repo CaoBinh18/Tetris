@@ -125,8 +125,7 @@ class Brick {
 
     rotate() {
         let newData = [];
-        let isNewDataValid = true; let isNewDataValid = true;
-
+        
         for (let col = 0; col < this.data[0].length; col++) {
             let newRow = []
             for (let row = this.data.length - 1; row >= 0; row--) {
@@ -135,6 +134,7 @@ class Brick {
             newData.push(newRow);
         }
 
+        let isNewDataValid = true;
 
         for (let newRow = 0; newRow < newData.length; newRow++) {
             for (let newCol = 0; newCol < newData[0].length; newCol++) {
@@ -383,6 +383,10 @@ class Game {
         this.update();
         this.draw();
         setTimeout(() => this.loop(), 30);
+
+    }
+
+    update() {
 
     }
 
