@@ -1,5 +1,5 @@
 const GAME_WIDTH = 200;
-const GAME_HEIGHT = 460;
+const GAME_HEIGHT = 400;
 const NUM_ROWS = 20;
 const NUM_COLS = 10;
 const _ = null;
@@ -233,30 +233,21 @@ class Board {
     }
 
     createDots() {
-        let dots = [];
+        this.dots = [];
 
         for (let row = 0; row < NUM_ROWS; row++) {
             for (let col = 0; col < NUM_COLS; col++) {
                 if (this.data[row][col] == x) {
                     let newDot = new Dot(this.game, row, col);
-                    dots.push(newDot);
+                    this.dots.push(newDot);
                 }
             }
         }
     }
 
     draw() {
-        let dots = [];
-
-        for (let row = 0; row < NUM_ROWS; row++) {
-            for (let col = 0; col < NUM_COLS; col++) {
-                if (this.data[row][col] == x) {
-                    let newDot = new Dot(this.game, row, col);
-                    dots.push(newDot);
-                }
-            }
-        }
-        dots.forEach(dot => dot.draw());
+        this.createDots();
+        this.dots.forEach(dot => dot.draw());
     }
 }
 
@@ -269,13 +260,13 @@ class Dot {
     }
 
     hitLeft() {
-        return this.col == 0;
+        return this.col == NUM_COLS + 1;
     }
     canMoveLeft() {
         if (this.hitLeft()) {
             return false;
         }
-        if (!this.game.board.isEmptyCell(this.row, this.col - 1)) { // check vị trí có thể rơi nữa k
+        if (!this.game.board.isEmptyCell(this.row, this.col - 1)) { 
             return false;
         }
         return true;
@@ -369,7 +360,7 @@ class Game {
 
     keyBoard() {
         document.addEventListener('keydown', (event) => {
-            console.log(event.code);
+            // console.log(event.code);
             switch (event.code) {
                 case 'ArrowLeft': this.brick.moveLeft(); break;
                 case 'ArrowRight': this.brick.moveRight(); break;
